@@ -8,4 +8,13 @@ corr <- function(directory, threshold = 0) {
   ## nitrate and sulfate; the default is 0
   
   ## Return a numeric vector of correlations
+  cor_vect <- numeric(0)
+  for (i in list.files(directory)){
+    temp <- read.csv(paste(directory, "/", i, sep=""))
+    comp_rows <- subset(temp, !is.na(sulfate) & !is.na(nitrate))
+    if (length(comp_rows[,1]) > threshold){
+      cor_vect <- rbind(cor_vect, cor(comp_rows$sulfate, comp_rows$nitrate))
+    }
+  }
+  return(cor_vect)
 }
